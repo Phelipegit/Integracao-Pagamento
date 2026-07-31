@@ -59,7 +59,7 @@ public class UserRegisterService {
                 "Verifique seu e-mail",
                 "<h1>Clique no link abaixo para verificar sua conta</h1>" +
                         "<strong>Seu link expira em 10 minutos</strong>" +
-                        "<p>https://phelipedev.com.br/verify/active-account/" + dataUser.getId() + "/?email=" + dataUser.getEmail() + "</p>");
+                        "<p>https://phelipedev.com.br/verify/active-account/" + dataUser.getId() + "?email=" + dataUser.getEmail() + "</p>");
 
         return ResponseEntity.status(201).body(new ApiResponse<>(true, TypesSucess.EMAIL_SENT_VERIFICATION_ACCOUNT.name(),null));
     }

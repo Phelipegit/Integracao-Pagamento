@@ -18,10 +18,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserLoginService {
 
-    private AuthenticationManager authenticationManager;
-    private JwtService jwtService;
 
-    public UserLoginService(JwtService jwtService) {
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+
+    public UserLoginService(AuthenticationManager authenticationManager,JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
     }
 
@@ -34,8 +36,9 @@ public class UserLoginService {
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-            String token = jwtService.generateToken(userDetails.getUsername(),null);
+            String token = jwtService.generateToken(userDetails.getUsername(),userDetails.getAuthorities().stream().map(e -> e.getAuthority()).findFirst().get());
 
+            System.out.println(userDetails.getAuthorities().stream().map(e -> e.getAuthority()).findFirst().get());
             return ResponseEntity.status(201).body(new ApiResponse<>(true, token,null));
         }catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body(new ApiResponse<>(false,null,new ErrorCode(HttpStatus.UNAUTHORIZED,TypesErrors.INVALIDS_CREDENTIALS.name())));

@@ -41,7 +41,7 @@ public class UserEntity {
     @Column(nullable = false)
     @Setter
     @Enumerated(EnumType.STRING)
-    private EnumRoles enumRoles = EnumRoles.ROLE_DEFAULT;
+    private EnumRoles enumRoles = EnumRoles.DEFAULT;
 
     @Column
     @Setter

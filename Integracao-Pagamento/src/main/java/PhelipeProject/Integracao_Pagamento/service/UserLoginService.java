@@ -40,7 +40,8 @@ public class UserLoginService {
 
             System.out.println(userDetails.getAuthorities().stream().map(e -> e.getAuthority()).findFirst().get());
             return ResponseEntity.status(201).body(new ApiResponse<>(true, token,null));
-        }catch (BadCredentialsException e) {
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(401).body(new ApiResponse<>(false,null,new ErrorCode(HttpStatus.UNAUTHORIZED,TypesErrors.INVALIDS_CREDENTIALS.name())));
         }
     }

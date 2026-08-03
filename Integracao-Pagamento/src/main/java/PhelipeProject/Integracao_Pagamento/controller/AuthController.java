@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("/auth/user")
+@RequestMapping("/auth/")
 public class AuthController {
 
     private final UserLoginService userLoginService;
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/verify-account/{uuid}")
-    public ResponseEntity<ApiResponse<String>> activeAccount(@PathVariable @NotBlank String uuid, @RequestParam @NotBlank String email) {
+    public ResponseEntity<ApiResponse<String>> activeAccount(   @PathVariable @NotBlank String uuid, @RequestParam @NotBlank String email) {
         return activeAccountService.activeAccount(email,uuid);
     }
 }

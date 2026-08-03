@@ -20,14 +20,14 @@ public class TransactionEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String id_transaction;
+    private String idTransaction;
 
     @Column(precision = 10,scale = 2)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     @Setter
-    private EnumTransactionStatus status = null;
+    private EnumTransactionStatus status = EnumTransactionStatus.CREATED;
 
     @Column(nullable = false)
     private LocalDateTime creat_at;
@@ -42,8 +42,8 @@ public class TransactionEntity {
     @ManyToOne
     private UserEntity id_user;
 
-    public TransactionEntity(String id_transaction,BigDecimal amount,String address,UserEntity id_user) {
-        this.id_transaction = id_transaction;
+    public TransactionEntity(String idTransaction,BigDecimal amount,String address,UserEntity id_user) {
+        this.idTransaction = idTransaction;
         this.amount = amount;
         this.creat_at = LocalDateTime.now(ZoneId.of("America/Campo_Grande"));
         this.address = address;

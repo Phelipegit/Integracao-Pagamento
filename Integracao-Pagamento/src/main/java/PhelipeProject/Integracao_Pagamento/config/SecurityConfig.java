@@ -13,7 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
@@ -37,11 +38,11 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return http
-                .cors(cors -> cors.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(req -> req.requestMatchers("/auth/**","/api/transaction/update/status").permitAll().anyRequest().permitAll())
+                .authorizeHttpRequests(req -> req.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
                 .build();
     }
 
@@ -51,9 +52,15 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
+        corsConfiguration.setAllowedOrigins(List.of("https://integracaopagamento.phelipedev.com.br"));
+
         corsConfiguration.setAllowedMethods(List.of("POST","PUT","DELETE","GET"));
 
-        return null;
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
+
+        return urlBasedCorsConfigurationSource;
     }
 
 }

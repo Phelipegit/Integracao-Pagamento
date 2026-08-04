@@ -1,9 +1,12 @@
 package PhelipeProject.Integracao_Pagamento.entity;
 
 import PhelipeProject.Integracao_Pagamento.entity.enums.EnumTransactionStatus;
+import PhelipeProject.Integracao_Pagamento.entity.enums.EnumTypesPayments;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,6 +25,10 @@ public class TransactionEntity {
     @Column(nullable = false)
     private String idTransaction;
 
+    @Column(nullable = false)
+    @Getter
+    private EnumTypesPayments type;
+
     @Column(precision = 10,scale = 2)
     private BigDecimal amount;
 
@@ -36,17 +43,14 @@ public class TransactionEntity {
     @Setter
     private LocalDateTime update_at = null;
 
-    @Column(nullable = false)
-    private String address;
-
     @ManyToOne
     private UserEntity id_user;
 
-    public TransactionEntity(String idTransaction,BigDecimal amount,String address,UserEntity id_user) {
+    public TransactionEntity(EnumTypesPayments type,String idTransaction,BigDecimal amount,UserEntity id_user) {
+        this.type = type;
         this.idTransaction = idTransaction;
         this.amount = amount;
         this.creat_at = LocalDateTime.now(ZoneId.of("America/Campo_Grande"));
-        this.address = address;
         this.id_user = id_user;
     }
 

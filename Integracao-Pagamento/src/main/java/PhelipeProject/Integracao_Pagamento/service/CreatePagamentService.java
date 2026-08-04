@@ -25,7 +25,8 @@ public class CreatePagamentService {
     private String URL_API;
     @Value("${ACESS_TOKEN_MERCADOPAGO}")
     private String TOKEN_BEARER;
-    public TransactionRepository transactionRepository;
+
+    private final TransactionRepository transactionRepository;
 
     public CreatePagamentService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
@@ -33,16 +34,14 @@ public class CreatePagamentService {
 
     public ResponseEntity<HttpStatus> createPagament() throws URISyntaxException, IOException, InterruptedException {
 
-        UUID idPayment = UUID.randomUUID();
+        String idPayment = UUID.randomUUID().toString();
 
-        try {
-            HttpClient httpClient = HttpClient.newBuilder().build();
-
+        try(HttpClient httpClient = HttpClient.newBuilder().build()) {
             HttpRequest httpRequest = HttpRequest
                     .newBuilder()
                     .uri(new URI(URL_API + "orders"))
                     .header("Content-type","application/json")
-                    .header("X-Idempotency-Key",idPayment.toString())
+                    .header("X-Idempotency-Key",idPayment)
                     .header("Authorization","Bearer " + TOKEN_BEARER)
                     .POST(HttpRequest.BodyPublishers.ofString( bodyJson))
                     .timeout(Duration.ofMinutes(5))

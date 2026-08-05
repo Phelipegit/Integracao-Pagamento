@@ -9,11 +9,13 @@ import PhelipeProject.Integracao_Pagamento.dto.UserRegisterRequest;
 import PhelipeProject.Integracao_Pagamento.entity.UserEntity;
 import PhelipeProject.Integracao_Pagamento.repository.UserRepository;
 import com.resend.core.exception.ResendException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -22,13 +24,17 @@ public class UserRegisterService {
     private final UserRepository userRepository;
     private final RabbitComponent rabbitComponent;
     private final PasswordEncoder encoder;
+    private final RedisTemplate<String, PendingUserData> redisTemplate;
     private final RedisService redis;
 
-    private UserRegisterService(UserRepository userRepository, RabbitComponent rabbitComponent,PasswordEncoder encoder,RedisService redis) {
+    private UserRegisterService(UserRepository userRepository,
+                                RabbitComponent rabbitComponent,
+                                PasswordEncoder encoder, RedisService redis, RedisTemplate<String, PendingUserData> redisTemplate) {
         this.userRepository = userRepository;
         this.rabbitComponent = rabbitComponent;
         this.encoder = encoder;
         this.redis = redis;
+        this.redisTemplate = redisTemplate;
     }
 
     public ResponseEntity<ApiResponse<String>> userRegister(UserRegisterRequest request) throws ResendException {
@@ -53,7 +59,7 @@ public class UserRegisterService {
                 request.getCpf().trim(),
                 encoder.encode(request.getPassword()));
 
-        redis.add("active-account:" + dataUser.getEmail(),dataUser,10L);
+        redis.add(redisTemplate,"active-account:" + dataUser.getEmail(),dataUser,10L);
 
         rabbitComponent.handleActive_account(request.getEmail().trim().toLowerCase(),
                 "Verifique seu e-mail",

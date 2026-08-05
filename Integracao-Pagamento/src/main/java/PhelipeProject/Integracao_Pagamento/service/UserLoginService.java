@@ -6,7 +6,9 @@ import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.TypesErrors;
 import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.UserLoginRequest;
 import PhelipeProject.Integracao_Pagamento.service.JWT.JwtService;
 import PhelipeProject.Integracao_Pagamento.service.JWT.UserDetailsImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,8 +40,17 @@ public class UserLoginService {
 
             String token = jwtService.generateToken(userDetails.getUsername(),userDetails.getAuthorities().stream().map(e -> e.getAuthority()).findFirst().get());
 
+            ResponseCookie cookie = ResponseCookie
+                            .from("authToken",token)
+                            .httpOnly(true)
+                            .secure(true)
+                            .sameSite("Lax")
+                            .domain(".phelipedev.com.br")
+                            .path("/")
+                            .build();
+
             System.out.println(userDetails.getAuthorities().stream().map(e -> e.getAuthority()).findFirst().get());
-            return ResponseEntity.status(201).body(new ApiResponse<>(true, token,null));
+            return ResponseEntity.status(201).header(HttpHeaders.SET_COOKIE,cookie.toString()).body(new ApiResponse<>(true, token,null));
         }catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(401).body(new ApiResponse<>(false,null,new ErrorCode(HttpStatus.UNAUTHORIZED,TypesErrors.INVALIDS_CREDENTIALS.name())));

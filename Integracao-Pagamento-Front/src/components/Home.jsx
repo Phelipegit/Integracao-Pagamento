@@ -99,7 +99,7 @@ export default function Home() {
       </main>
 
       <footer className="home__foot">
-        <span>Integradora · integração com a API do Mercado Pago</span>
+        <span>Feito por Phelipe Bistaffa</span>
       </footer>
     </div>
   )

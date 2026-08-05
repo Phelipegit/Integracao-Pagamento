@@ -1,0 +1,201 @@
+:root {
+  --bg: #000000;
+  --surface: #0A0A0A;
+  --surface-2: #141414;
+  --line: rgba(255, 255, 255, 0.10);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --ink: #FFFFFF;
+  --ink-soft: rgba(255, 255, 255, 0.62);
+  --ink-faint: rgba(255, 255, 255, 0.36);
+  --warn: #FF6B6B;
+  --brand: #2EE6A8;
+
+  --serif: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- layout base ---------- */
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 75%);
+  z-index: 0;
+}
+
+.bg-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04), transparent 50%);
+  z-index: 0;
+}
+
+/* ---------- shell ---------- */
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 96px) clamp(16px, 4vw, 32px);
+  display: grid;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ---------- card ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: clamp(24px, 3vw, 36px);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 30px 80px -40px rgba(0, 0, 0, 0.8);
+}
+
+.card__title {
+  margin: 0 0 24px;
+  font-size: clamp(22px, 2.4vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- form ---------- */
+.form { display: flex; flex-direction: column; gap: 22px; }
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+
+.field__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.field__sub {
+  margin: -4px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+
+.input {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+.input::placeholder {
+  color: var(--ink-faint);
+  font-family: var(--mono);
+}
+.input:focus {
+  border-color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+}
+.input--err { border-color: var(--warn); }
+.input--err:focus { box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15); }
+
+.login-id:focus::placeholder { opacity: 0.5; }
+
+.msg {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  min-height: 1.1rem;
+}
+.msg--err { color: var(--warn); }
+
+/* ---------- button ---------- */
+.btn {
+  appearance: none;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 16px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+.btn:hover { filter: brightness(0.9); }
+.btn:active { transform: scale(0.99); }
+.btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+.btn__icon { width: 16px; height: 16px; }
+
+/* ---------- login link ---------- */
+.login-link {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.login-link a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  font-weight: 500;
+}
+.login-link a:hover { color: var(--brand); }
+
+/* ---------- legal ---------- */
+.legal {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+.legal a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.legal a:hover { color: var(--ink); }

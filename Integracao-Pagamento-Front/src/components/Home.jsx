@@ -99,7 +99,7 @@ export default function Home() {
       </main>
 
       <footer className="home__foot">
-        <span><a href='https://github.com/phelipeGit'>Feito por PhelipeGit</a></span>
+        <span>Feito por <a style={{color:"white"}} href='https://github.com/phelipeGit'>PhelipeGit</a></span>
       </footer>
     </div>
   )

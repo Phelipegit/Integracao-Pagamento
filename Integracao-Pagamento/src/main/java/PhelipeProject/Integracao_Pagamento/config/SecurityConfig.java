@@ -52,11 +52,13 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.setAllowedOrigins(List.of("https://phelipedev.com.br"));
+        corsConfiguration.setAllowedOrigins(List.of("https://phelipedev.com.br","http://localhost:4173"));
 
-        corsConfiguration.setAllowedMethods(List.of("POST","PUT","DELETE","GET"));
+        corsConfiguration.setAllowedMethods(List.of("POST","PUT","DELETE","GET","OPTIONS"));
 
         corsConfiguration.setAllowCredentials(true);
+
+        corsConfiguration.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 

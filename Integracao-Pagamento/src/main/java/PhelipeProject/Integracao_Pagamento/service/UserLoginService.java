@@ -1,9 +1,6 @@
 package PhelipeProject.Integracao_Pagamento.service;
 
-import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.ApiResponse;
-import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.ErrorCode;
-import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.TypesErrors;
-import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.UserLoginRequest;
+import PhelipeProject.Integracao_Pagamento.dto.ApiResponse.*;
 import PhelipeProject.Integracao_Pagamento.service.JWT.JwtService;
 import PhelipeProject.Integracao_Pagamento.service.JWT.UserDetailsImpl;
 import org.springframework.http.HttpHeaders;
@@ -50,7 +47,7 @@ public class UserLoginService {
                             .build();
 
             System.out.println(userDetails.getAuthorities().stream().map(e -> e.getAuthority()).findFirst().get());
-            return ResponseEntity.status(201).header(HttpHeaders.SET_COOKIE,cookie.toString()).body(new ApiResponse<>(true, token,null));
+            return ResponseEntity.status(201).header(HttpHeaders.SET_COOKIE,cookie.toString()).body(new ApiResponse<>(true, TypesSucess.LOGIN_OK.name(), null));
         }catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(401).body(new ApiResponse<>(false,null,new ErrorCode(HttpStatus.UNAUTHORIZED,TypesErrors.INVALIDS_CREDENTIALS.name())));

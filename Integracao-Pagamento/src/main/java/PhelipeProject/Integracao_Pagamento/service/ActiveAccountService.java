@@ -39,6 +39,8 @@ public class ActiveAccountService {
 
         redis.deletePendingUserData(redisTemplate,email);
 
+        System.out.println("CHEGOU AQUI");
+
         return ResponseEntity.status(201).body(new ApiResponse<>(true, TypesSucess.EMAIL_VERIFICATION_OK.name(), null));
     }
 }

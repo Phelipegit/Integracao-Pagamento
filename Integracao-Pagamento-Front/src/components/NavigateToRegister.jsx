@@ -1,7 +1,7 @@
 export default function NavigateToRegister() {
-    function retornar() {
+    function returnRegister() {
         window.location.href = "/register";
     }
 
-    return retornar();
+    return returnRegister();
 }

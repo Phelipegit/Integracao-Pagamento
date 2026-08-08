@@ -36,7 +36,7 @@ public class AuthController {
         return userRegisterService.userRegister(request);
     }
 
-    @PostMapping("/verify-account/{uuid}")
+    @GetMapping("/verify-account/{uuid}")
     public ResponseEntity<ApiResponse<String>> activeAccount(   @PathVariable @NotBlank String uuid, @RequestParam @NotBlank String email) {
         return activeAccountService.activeAccount(email,uuid);
     }

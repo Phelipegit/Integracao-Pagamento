@@ -9,6 +9,6 @@ public class CreatePaymentRequest {
 
     @DecimalMin("1.00")
     @DecimalMax("2000.00")
-    private Double valor;
+    private Double amount;
 
 }

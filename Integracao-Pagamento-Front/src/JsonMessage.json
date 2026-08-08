@@ -1,0 +1,5 @@
+{
+    "CPF_ALREADY_IN_USE":"CPF em uso, tente outro",
+    "EMAIL_ALREADY_IN_USE":"Email em uso, tente outro",
+    "VERIFICATION_EMAIL_ALREADY_SENT":"Verifique sua caixa de entrada no e-mail"
+}

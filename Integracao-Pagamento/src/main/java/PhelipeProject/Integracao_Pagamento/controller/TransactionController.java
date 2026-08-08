@@ -41,7 +41,7 @@ public class TransactionController {
     }
 
     @GetMapping("/info/{id}")
-    public ResponseEntity<ApiResponse<InfoPaymentResponse>> getInfoPayment(@PathVariable int id) throws IOException, InterruptedException {
+    public ResponseEntity<ApiResponse<InfoPaymentResponse>> getInfoPayment(@PathVariable String id) throws IOException, InterruptedException {
         return getInfoPaymentService.getInfoPayment(id);
     }
 

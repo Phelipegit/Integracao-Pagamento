@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import '../css/Register.css'
+import JsonMessage from '../JsonMessage.json'
 
 /* ---------- helpers ---------- */
 function onlyDigits(value) {
@@ -46,7 +48,10 @@ export default function Register() {
     const [password, setPassword] = useState('')
     const [touched, setTouched] = useState({ cpf: false, email: false, password: false })
     const [submitted, setSubmitted] = useState(false)
-    const URL_API = "https://api.phelipedev.com.br"
+    const [loading, setLoading] = useState(false)
+    const [serverError, setServerError] = useState('')
+    const [registered, setRegistered] = useState(false)
+    const URL_API = "http://localhost:8080"
 
     const cpfError =
         (!touched.cpf && !submitted)
@@ -77,22 +82,35 @@ export default function Register() {
 
     const score = passwordScore(password)
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
         setSubmitted(true)
+        setServerError('')
         setTouched({ cpf: true, email: true, password: true })
         if (cpfError || emailError || passwordError || !cpf || !email || !password) {
             return
         }
 
-        const response = fetch(`${URL_API}/auth/register`, {
-            method:"POST",
-            headers: {
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({"email":email,"cpf":cpf,"password":password})
+        setLoading(true)
+        try {
+            const response = await fetch(`${URL_API}/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, cpf, password })
+            })
 
-        });
+            const data = await response.json()
+
+            if (response.ok && data.success) {
+                setRegistered(true)
+            } else {
+                setServerError(JsonMessage[data.error.error] || 'Não foi possível criar sua conta. Tente novamente.')
+            }
+        } catch (err) {
+            setServerError('Erro de conexão. Verifique sua internet e tente novamente.')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -174,15 +192,17 @@ export default function Register() {
                             }
                         </div>
 
-                        <button type="submit" className="btn">
-                            Abrir minha conta
+                        {serverError && <p className="msg msg--err">{serverError}</p>}
+
+                        <button type="submit" className="btn" disabled={loading}>
+                            {loading ? 'Enviando...' : 'Abrir minha conta'}
                             <svg viewBox="0 0 24 24" aria-hidden="true" className="btn__icon">
                                 <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" fill="none" />
                             </svg>
                         </button>
 
                         <p className="login-link">
-                            Já tem conta? <a href="/login">Entrar</a>
+                            Já tem conta? <Link to="/login">Entrar</Link>
                         </p>
 
                         <p className="legal">
@@ -193,6 +213,38 @@ export default function Register() {
                     </form>
                 </section>
             </main>
+
+            {registered && (
+                <div className="modal-overlay" onClick={() => setRegistered(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <button
+                            type="button"
+                            className="modal__close"
+                            onClick={() => setRegistered(false)}
+                            aria-label="Fechar"
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </button>
+
+                        <div className="success">
+                            <div className="success__icon">
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+                            <h2 className="success__title">Verifique seu e-mail</h2>
+                            <p className="success__text">
+                                Enviamos um link de verificação para{' '}
+                                <span className="success__email">{email}</span>.
+                                <br />
+                                Clique nele para ativar sua conta.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

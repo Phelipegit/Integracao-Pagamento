@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -51,7 +52,7 @@ public class UserRegisterService {
             return ResponseEntity.status(409).body(new ApiResponse<>(false, null, new ErrorCode(HttpStatus.CONFLICT,TypesErrors.CPF_ALREADY_IN_USE.name())));
         }
 
-        if(redis.exist_account_verify(request.getEmail().trim().toLowerCase())) {
+        if(redis.existKey(redisTemplate,request.getEmail().trim().toLowerCase())) {
             return ResponseEntity.status(409).body(new ApiResponse<>(false,null, new ErrorCode(HttpStatus.CONFLICT,TypesErrors.VERIFICATION_EMAIL_ALREADY_SENT.name())));
         }
 

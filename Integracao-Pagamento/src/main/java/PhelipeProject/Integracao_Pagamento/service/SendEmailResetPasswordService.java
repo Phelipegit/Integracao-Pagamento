@@ -21,13 +21,7 @@ public class SendEmailResetPasswordService {
 
     public Object sendEmailResetPassword(String email) {
 
-        if(redisTemplate.)
-
-        Optional<UserEntity> entityOptional = userRepository.findByEmail(email);
-
-        if(entityOptional.isEmpty()) {
-            return null;
-        }
+        
 
 
 

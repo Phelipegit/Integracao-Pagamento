@@ -34,7 +34,7 @@ public class TransactionEntity {
 
     @Enumerated(EnumType.STRING)
     @Setter
-    private EnumTransactionStatus status = EnumTransactionStatus.CREATED;
+    private EnumTransactionStatus status = EnumTransactionStatus.PENDING;
 
     @Column(nullable = false)
     private LocalDateTime creat_at;
